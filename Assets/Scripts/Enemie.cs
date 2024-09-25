@@ -1,15 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Enemie : MonoBehaviour
 {
-    public float Hp;
+    public float Hp = 10;
     public float Damage;
     public float AtackSpeed;
     public float AttackRange = 2;
-
 
     public Animator AnimatorController;
     public NavMeshAgent Agent;
@@ -22,7 +19,6 @@ public class Enemie : MonoBehaviour
     {
         SceneManager.Instance.AddEnemie(this);
         Agent.SetDestination(SceneManager.Instance.Player.transform.position);
-
     }
 
     private void Update()
@@ -47,7 +43,7 @@ public class Enemie : MonoBehaviour
             if (Time.time - lastAttackTime > AtackSpeed)
             {
                 lastAttackTime = Time.time;
-                SceneManager.Instance.Player.Hp -= Damage;
+                SceneManager.Instance.Player.Hp -= Damage;                
                 AnimatorController.SetTrigger("Attack");
             }
         }

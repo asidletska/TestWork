@@ -2,16 +2,23 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float Hp;
+    public float Hp = 50;
     public float Damage;
     public float AtackSpeed;
     public float AttackRange = 2;
     public float moveSpeed = 5;
-    private float lastAttackTime = 0;
+    public float attackCooldown = 1;
+    private float cooldownTimer = 0;
+
     private bool isDead = false;
     public Animator AnimatorController;
     public Transform cameraTransform;
 
+    public HealthBar healthBar;
+    private void Start()
+    {
+        healthBar.SetMaxHealth(Hp);
+    }
     private void Update()
     {
         if (isDead)
@@ -54,22 +61,28 @@ public class Player : MonoBehaviour
 
         }
 
-        if (closestEnemie != null)
+        cooldownTimer -= Time.deltaTime;
+        if (Input.GetKeyDown(KeyCode.Space) && cooldownTimer <= 0)
         {
-            var distance = Vector3.Distance(transform.position, closestEnemie.transform.position);
-            if (distance <= AttackRange)
-            {
-                if (Time.time - lastAttackTime > AtackSpeed)
-                {
-                    //transform.LookAt(closestEnemie.transform);
-                    transform.transform.rotation = Quaternion.LookRotation(closestEnemie.transform.position - transform.position);
-
-                    lastAttackTime = Time.time;
-                    closestEnemie.Hp -= Damage;
-                    AnimatorController.SetTrigger("Attack");
-                }
-            }
+            Attack();
         }
+        //if (closestEnemie != null)
+        //{
+        //    var distance = Vector3.Distance(transform.position, closestEnemie.transform.position);
+        //    if (distance <= AttackRange)
+        //    {
+        //        if (Time.time - lastAttackTime > AtackSpeed)
+        //        {
+        //            //transform.LookAt(closestEnemie.transform);
+        //            transform.transform.rotation = Quaternion.LookRotation(closestEnemie.transform.position - transform.position);
+
+        //            lastAttackTime = Time.time;
+        //            closestEnemie.Hp -= Damage;
+        //            AnimatorController.SetTrigger("Attack");
+        //        }
+        //    }
+        //}
+        healthBar.SetHealth(Hp);
     }
 
     private void Move()
@@ -88,7 +101,6 @@ public class Player : MonoBehaviour
             Vector3 moveDir = Quaternion.Euler(0, targetAngle, 0)* Vector3.forward;
 
             transform.position += moveDir * moveSpeed * Time.deltaTime;
-            //transform.rotation = Quaternion.LookRotation(moveDirection);
             AnimatorController.SetBool("run", true);
         }
         else
@@ -96,7 +108,12 @@ public class Player : MonoBehaviour
             AnimatorController.SetBool("run", false);
         }
     }
+    private void Attack()
+    {
+        AnimatorController.SetTrigger("Attack");
 
+
+    }
     private void Die()
     {
         isDead = true;
