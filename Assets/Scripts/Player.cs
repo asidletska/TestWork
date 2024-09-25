@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -8,10 +6,11 @@ public class Player : MonoBehaviour
     public float Damage;
     public float AtackSpeed;
     public float AttackRange = 2;
-
+    public float moveSpeed = 5;
     private float lastAttackTime = 0;
     private bool isDead = false;
     public Animator AnimatorController;
+    public Transform cameraTransform;
 
     private void Update()
     {
@@ -26,6 +25,7 @@ public class Player : MonoBehaviour
             return;
         }
 
+        Move();
 
         var enemies = SceneManager.Instance.Enemies;
         Enemie closestEnemie = null;
@@ -69,6 +69,31 @@ public class Player : MonoBehaviour
                     AnimatorController.SetTrigger("Attack");
                 }
             }
+        }
+    }
+
+    private void Move()
+    {
+        float moveX = Input.GetAxis("Horizontal");
+        float moveY = Input.GetAxis("Vertical");
+
+        Vector3 moveDirection = new Vector3(moveX, 0, moveY).normalized;
+
+        if (moveDirection.magnitude >= 0.1f)
+        {
+            float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg + cameraTransform.eulerAngles.y;
+            Quaternion rotation = Quaternion.Euler(0, targetAngle, 0);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10);
+
+            Vector3 moveDir = Quaternion.Euler(0, targetAngle, 0)* Vector3.forward;
+
+            transform.position += moveDir * moveSpeed * Time.deltaTime;
+            //transform.rotation = Quaternion.LookRotation(moveDirection);
+            AnimatorController.SetBool("run", true);
+        }
+        else
+        {
+            AnimatorController.SetBool("run", false);
         }
     }
 
