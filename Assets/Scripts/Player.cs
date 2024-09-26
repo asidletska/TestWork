@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -13,8 +14,8 @@ public class Player : MonoBehaviour
     private bool isDead = false;
     public Animator AnimatorController;
     public Transform cameraTransform;
-
     public HealthBar healthBar;
+
     private void Start()
     {
         healthBar.SetMaxHealth(Hp);
@@ -68,22 +69,23 @@ public class Player : MonoBehaviour
             closestEnemie.Hp -= Damage;
             Hp += 4f;
         }
-        //if (closestEnemie != null)
-        //{
-        //    var distance = Vector3.Distance(transform.position, closestEnemie.transform.position);
-        //    if (distance <= AttackRange)
-        //    {
-        //        if (Time.time - attackCooldown > AtackSpeed)
-        //        {
-        //            //transform.LookAt(closestEnemie.transform);
-        //            transform.transform.rotation = Quaternion.LookRotation(closestEnemie.transform.position - transform.position);
 
-        //            attackCooldown = Time.time;
-        //            //closestEnemie.Hp -= Damage;
-        //            //AnimatorController.SetTrigger("Attack");
-        //        }
-        //    }
-        //}
+        if (closestEnemie != null)
+        {
+            var distance = Vector3.Distance(transform.position, closestEnemie.transform.position);
+            if (distance <= AttackRange)
+            {
+                if (Time.time - attackCooldown > AtackSpeed)
+                {
+                    transform.LookAt(closestEnemie.transform);
+                    transform.transform.rotation = Quaternion.LookRotation(closestEnemie.transform.position - transform.position);
+
+                    //attackCooldown = Time.time;
+                    //closestEnemie.Hp -= Damage;
+                    //AnimatorController.SetTrigger("Attack");
+                }
+            }
+        }
         healthBar.SetHealth(Hp);
     }
 
@@ -112,10 +114,10 @@ public class Player : MonoBehaviour
     }
     private void Attack()
     {
-        AnimatorController.SetTrigger("Attack");
         attackCooldown = Time.time;
-
+        AnimatorController.SetTrigger("Attack");        
     }
+
     private void Die()
     {
         isDead = true;
