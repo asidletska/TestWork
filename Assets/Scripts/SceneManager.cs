@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 
 public class SceneManager : MonoBehaviour
@@ -10,6 +11,7 @@ public class SceneManager : MonoBehaviour
     public List<Enemie> Enemies;
     public GameObject Lose;
     public GameObject Win;
+    public TextMeshProUGUI waveCount;
 
     private int currWave = 0;
     [SerializeField] private LevelConfig Config;
@@ -54,11 +56,12 @@ public class SceneManager : MonoBehaviour
         var wave = Config.Waves[currWave];
         foreach (var character in wave.Characters)
         {
+            //Vector3 pos = new Vector3(Random.Range(20, 120), 0, Random.Range(20, 120));  // GameScene
             Vector3 pos = new Vector3(Random.Range(-10, 10), 0, Random.Range(-10, 10));
             Instantiate(character, pos, Quaternion.identity);
         }
         currWave++;
-
+        waveCount.text = "Wave : " + currWave;
     }
 
     public void Reset()

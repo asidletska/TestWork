@@ -65,20 +65,22 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && cooldownTimer <= 0)
         {
             Attack();
+            closestEnemie.Hp -= Damage;
+            Hp += 4f;
         }
         //if (closestEnemie != null)
         //{
         //    var distance = Vector3.Distance(transform.position, closestEnemie.transform.position);
         //    if (distance <= AttackRange)
         //    {
-        //        if (Time.time - lastAttackTime > AtackSpeed)
+        //        if (Time.time - attackCooldown > AtackSpeed)
         //        {
         //            //transform.LookAt(closestEnemie.transform);
         //            transform.transform.rotation = Quaternion.LookRotation(closestEnemie.transform.position - transform.position);
 
-        //            lastAttackTime = Time.time;
-        //            closestEnemie.Hp -= Damage;
-        //            AnimatorController.SetTrigger("Attack");
+        //            attackCooldown = Time.time;
+        //            //closestEnemie.Hp -= Damage;
+        //            //AnimatorController.SetTrigger("Attack");
         //        }
         //    }
         //}
@@ -111,7 +113,7 @@ public class Player : MonoBehaviour
     private void Attack()
     {
         AnimatorController.SetTrigger("Attack");
-
+        attackCooldown = Time.time;
 
     }
     private void Die()
