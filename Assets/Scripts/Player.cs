@@ -1,20 +1,21 @@
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
     public float Hp = 50;
     public float Damage;
     public float AtackSpeed;
-    public float AttackRange = 2;
+    public float AttackRange = 1;
     public float moveSpeed = 5;
     public float attackCooldown = 1;
-    private float cooldownTimer = 0;
+    private float lastAttackTime = 0;
 
     private bool isDead = false;
     public Animator AnimatorController;
     public Transform cameraTransform;
     public HealthBar healthBar;
+    public UnityEvent stroke;
 
     private void Start()
     {
@@ -35,6 +36,13 @@ public class Player : MonoBehaviour
 
         Move();
 
+        Attack();
+
+        healthBar.SetHealth(Hp);
+    }
+
+    private void Attack()
+    {
         var enemies = SceneManager.Instance.Enemies;
         Enemie closestEnemie = null;
 
@@ -62,33 +70,43 @@ public class Player : MonoBehaviour
 
         }
 
-        cooldownTimer -= Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.Space) && cooldownTimer <= 0)
+        if (closestEnemie != null && Input.GetKeyDown(KeyCode.Space))
         {
-            Attack();
-            closestEnemie.Hp -= Damage;
-            Hp += 4f;
-        }
-
-        if (closestEnemie != null)
-        {
+            AnimatorController.SetTrigger("Attack");
             var distance = Vector3.Distance(transform.position, closestEnemie.transform.position);
             if (distance <= AttackRange)
             {
-                if (Time.time - attackCooldown > AtackSpeed)
+                if (Time.time - lastAttackTime > AtackSpeed)
                 {
                     transform.LookAt(closestEnemie.transform);
                     transform.transform.rotation = Quaternion.LookRotation(closestEnemie.transform.position - transform.position);
 
-                    //attackCooldown = Time.time;
-                    //closestEnemie.Hp -= Damage;
-                    //AnimatorController.SetTrigger("Attack");
+                    lastAttackTime = Time.time;
+                    closestEnemie.Hp -= Damage;
+                    Hp += 4;
+                    AnimatorController.SetTrigger("Attack");
+                    stroke.Invoke();
                 }
             }
         }
-        healthBar.SetHealth(Hp);
-    }
+        //if (closestEnemie != null && Input.GetKeyDown(KeyCode.K))
+        //{
+        //    var distance = Vector3.Distance(transform.position, closestEnemie.transform.position);
+        //    if (distance <= AttackRange)
+        //    {
+        //        if (Time.time - lastAttackTime > AtackSpeed)
+        //        {
+        //            transform.LookAt(closestEnemie.transform);
+        //            transform.transform.rotation = Quaternion.LookRotation(closestEnemie.transform.position - transform.position);
 
+        //            lastAttackTime = Time.time;
+        //            closestEnemie.Hp -= Damage;
+        //            AnimatorController.SetTrigger("DoubleAttack");
+        //            stroke.Invoke();
+        //        }
+        //    }
+        //}
+    }
     private void Move()
     {
         float moveX = Input.GetAxis("Horizontal");
@@ -102,7 +120,7 @@ public class Player : MonoBehaviour
             Quaternion rotation = Quaternion.Euler(0, targetAngle, 0);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10);
 
-            Vector3 moveDir = Quaternion.Euler(0, targetAngle, 0)* Vector3.forward;
+            Vector3 moveDir = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
 
             transform.position += moveDir * moveSpeed * Time.deltaTime;
             AnimatorController.SetBool("run", true);
@@ -112,11 +130,7 @@ public class Player : MonoBehaviour
             AnimatorController.SetBool("run", false);
         }
     }
-    private void Attack()
-    {
-        attackCooldown = Time.time;
-        AnimatorController.SetTrigger("Attack");        
-    }
+
 
     private void Die()
     {

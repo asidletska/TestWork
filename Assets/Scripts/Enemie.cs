@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 public class Enemie : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class Enemie : MonoBehaviour
 
     public Animator AnimatorController;
     public NavMeshAgent Agent;
+    public UnityEvent die;
 
     private float lastAttackTime = 0;
     private bool isDead = false;
@@ -19,6 +21,7 @@ public class Enemie : MonoBehaviour
     {
         SceneManager.Instance.AddEnemie(this);
         Agent.SetDestination(SceneManager.Instance.Player.transform.position);
+
     }
 
     private void Update()
@@ -62,6 +65,7 @@ public class Enemie : MonoBehaviour
     {
         SceneManager.Instance.RemoveEnemie(this);
         isDead = true;
+        die.Invoke();
         AnimatorController.SetTrigger("Die");
     }
 
