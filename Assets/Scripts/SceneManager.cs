@@ -56,8 +56,8 @@ public class SceneManager : MonoBehaviour
         var wave = Config.Waves[currWave];
         foreach (var character in wave.Characters)
         {
-            Vector3 pos = new Vector3(Random.Range(50, 60), 0, Random.Range(-25, -15));  // GameScene
-            //Vector3 pos = new Vector3(Random.Range(-10, 10), 0, Random.Range(-10, 10));
+            //Vector3 pos = new Vector3(Random.Range(50, 60), 0, Random.Range(-25, -15));  // GameScene
+            Vector3 pos = new Vector3(Random.Range(-10, 10), 0, Random.Range(-6, -13));
             Instantiate(character, pos, Quaternion.identity);
         }
         currWave++;
@@ -66,7 +66,8 @@ public class SceneManager : MonoBehaviour
 
     public void Reset()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        // UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(1); // GameScene
     }
     
 
