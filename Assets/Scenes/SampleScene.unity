@@ -1388,6 +1388,10 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5444470903243414837, guid: 5bafed6b0b449244bbd4c2efd7cb2252, type: 3}
+      propertyPath: Hp
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5444470903243414837, guid: 5bafed6b0b449244bbd4c2efd7cb2252, type: 3}
       propertyPath: healthBar
       value: 
       objectReference: {fileID: 1597816413}
@@ -1639,6 +1643,18 @@ PrefabInstance:
     - target: {fileID: 2833740036850930846, guid: b488f9b1fbfd89c4ab8cfbcfd8417f52, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2833740036850930846, guid: b488f9b1fbfd89c4ab8cfbcfd8417f52, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 6.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7752221465585580929, guid: b488f9b1fbfd89c4ab8cfbcfd8417f52, type: 3}
+      propertyPath: m_Value
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7752221465585580929, guid: b488f9b1fbfd89c4ab8cfbcfd8417f52, type: 3}
+      propertyPath: m_MaxValue
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8201780524316705448, guid: b488f9b1fbfd89c4ab8cfbcfd8417f52, type: 3}
       propertyPath: m_Name

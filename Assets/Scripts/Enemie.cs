@@ -58,14 +58,11 @@ public class Enemie : MonoBehaviour
         Debug.Log(Agent.speed);
 
     }
-
-
-
-    private void Die()
+    public void Die()
     {
         SceneManager.Instance.RemoveEnemie(this);
         isDead = true;
-        die.Invoke();
+        die.Invoke();        
         AnimatorController.SetTrigger("Die");
     }
 

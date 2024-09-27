@@ -83,29 +83,14 @@ public class Player : MonoBehaviour
 
                     lastAttackTime = Time.time;
                     closestEnemie.Hp -= Damage;
-                    Hp += 4;
+
+                    Hp += 5;
                     AnimatorController.SetTrigger("Attack");
                     stroke.Invoke();
                 }
             }
         }
-        //if (closestEnemie != null && Input.GetKeyDown(KeyCode.K))
-        //{
-        //    var distance = Vector3.Distance(transform.position, closestEnemie.transform.position);
-        //    if (distance <= AttackRange)
-        //    {
-        //        if (Time.time - lastAttackTime > AtackSpeed)
-        //        {
-        //            transform.LookAt(closestEnemie.transform);
-        //            transform.transform.rotation = Quaternion.LookRotation(closestEnemie.transform.position - transform.position);
-
-        //            lastAttackTime = Time.time;
-        //            closestEnemie.Hp -= Damage;
-        //            AnimatorController.SetTrigger("DoubleAttack");
-        //            stroke.Invoke();
-        //        }
-        //    }
-        //}
+       
     }
     private void Move()
     {
